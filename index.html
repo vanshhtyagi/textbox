@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TextBox Testbed — 50 Input Types</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0F1117;
+  --surface:   #181C26;
+  --surface2:  #1F2433;
+  --border:    rgba(255,255,255,0.08);
+  --border-hi: rgba(99,179,237,0.5);
+  --accent:    #63B3ED;
+  --accent2:   #F6AD55;
+  --accent3:   #68D391;
+  --accent4:   #FC8181;
+  --text:      #E2E8F0;
+  --muted:     #718096;
+  --label:     #A0AEC0;
+  --radius:    8px;
+  --font-head: 'DM Serif Display', Georgia, serif;
+  --font-body: 'Outfit', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.site-header {
+  background: linear-gradient(135deg, #0D1321 0%, #162032 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 2rem 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.site-header::before {
+  content: '';
+  position: absolute;
+  top: -80px; left: 50%;
+  transform: translateX(-50%);
+  width: 600px; height: 200px;
+  background: radial-gradient(ellipse, rgba(99,179,237,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.site-header h1 {
+  font-family: var(--font-head);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #fff;
+  margin-bottom: 0.5rem;
+}
+.site-header h1 em {
+  color: var(--accent);
+  font-style: italic;
+}
+.site-header p {
+  color: var(--muted);
+  font-size: 14px;
+  max-width: 480px;
+  margin: 0 auto;
+}
+.badge-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1.25rem;
+  flex-wrap: wrap;
+}
+.badge {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  color: var(--muted);
+}
+
+/* ── LAYOUT ── */
+.container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+
+/* ── SECTION ── */
+.section {
+  margin-bottom: 3rem;
+}
+.section-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+.section-num {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--accent);
+  background: rgba(99,179,237,0.08);
+  border: 1px solid rgba(99,179,237,0.2);
+  border-radius: 4px;
+  padding: 2px 8px;
+  white-space: nowrap;
+}
+.section-title {
+  font-family: var(--font-head);
+  font-size: 1.25rem;
+  font-weight: 400;
+  color: var(--text);
+}
+
+/* ── GRID ── */
+.grid { display: grid; gap: 1rem; }
+.grid-2 { grid-template-columns: repeat(2, 1fr); }
+.grid-3 { grid-template-columns: repeat(3, 1fr); }
+.grid-4 { grid-template-columns: repeat(4, 1fr); }
+
+/* ── FIELD ── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--label);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.field-num {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  background: var(--surface2);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+.field-hint {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 3px;
+}
+
+/* ── BASE INPUT ── */
+input, textarea, select {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 10px 12px;
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+  -webkit-appearance: none;
+  appearance: none;
+}
+input:focus, textarea:focus, select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(99,179,237,0.12);
+}
+input::placeholder, textarea::placeholder { color: var(--muted); }
+select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23718096' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; background-color: var(--surface); }
+
+/* ── INPUT VARIANTS ── */
+
+/* Outlined */
+.inp-outlined { background: transparent; border: 1.5px solid var(--border); }
+.inp-outlined:focus { border-color: var(--accent); background: rgba(99,179,237,0.03); }
+
+/* Filled */
+.inp-filled { background: var(--surface2); border-color: transparent; border-bottom: 2px solid var(--muted); border-radius: var(--radius) var(--radius) 0 0; }
+.inp-filled:focus { border-bottom-color: var(--accent); box-shadow: none; background: rgba(99,179,237,0.05); }
+
+/* Pill */
+.inp-pill { border-radius: 100px; padding: 10px 18px; }
+
+/* Minimal / underline only */
+.inp-underline { background: transparent; border: none; border-bottom: 1.5px solid var(--border); border-radius: 0; padding: 8px 2px; }
+.inp-underline:focus { border-bottom-color: var(--accent); box-shadow: none; }
+
+/* Ghost */
+.inp-ghost { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.12); }
+.inp-ghost:focus { border-color: var(--accent); border-style: solid; }
+
+/* Flush (full-width borderless) */
+.inp-flush { background: transparent; border: none; border-radius: 0; font-size: 18px; font-weight: 600; padding: 8px 0; }
+.inp-flush:focus { box-shadow: none; border-bottom: 2px solid var(--accent); }
+
+/* Error state */
+.inp-error { border-color: var(--accent4) !important; }
+.inp-error:focus { box-shadow: 0 0 0 3px rgba(252,129,129,0.15) !important; }
+.field-error { font-size: 11px; color: var(--accent4); margin-top: 3px; }
+
+/* Success state */
+.inp-success { border-color: var(--accent3) !important; }
+.inp-success:focus { box-shadow: 0 0 0 3px rgba(104,211,145,0.15) !important; }
+
+/* Warning state */
+.inp-warning { border-color: var(--accent2) !important; }
+
+/* Disabled */
+input:disabled, textarea:disabled, select:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* Read-only */
+input[readonly] { background: var(--surface2); cursor: default; color: var(--muted); }
+input[readonly]:focus { border-color: var(--border); box-shadow: none; }
+
+/* ── INPUT GROUPS ── */
+.input-group { display: flex; }
+.input-group input { border-radius: 0; flex: 1; }
+.input-group input:first-child { border-radius: var(--radius) 0 0 var(--radius); }
+.input-group input:last-child  { border-radius: 0 var(--radius) var(--radius) 0; }
+.ig-prefix, .ig-suffix {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 13px;
+  white-space: nowrap;
+  font-family: var(--font-mono);
+}
+.ig-prefix { border-right: none; border-radius: var(--radius) 0 0 var(--radius); }
+.ig-suffix { border-left: none;  border-radius: 0 var(--radius) var(--radius) 0; }
+.ig-btn {
+  padding: 0 16px;
+  background: var(--accent);
+  color: #0D1321;
+  border: none;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  cursor: pointer;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.ig-btn:hover { background: #90CDF4; }
+
+/* ── ICON INPUTS ── */
+.icon-field { position: relative; }
+.icon-field input { padding-left: 38px; }
+.icon-field .field-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 15px;
+  pointer-events: none;
+  line-height: 1;
+}
+.icon-field-right input { padding-right: 38px; }
+.icon-field-right .field-icon-r {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 15px;
+  cursor: pointer;
+}
+
+/* ── TEXTAREA VARIANTS ── */
+textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+.ta-auto { resize: none; min-height: 60px; overflow: hidden; }
+.ta-fixed { resize: none; }
+.ta-mono { font-family: var(--font-mono); font-size: 13px; }
+
+/* ── CHAR COUNT ── */
+.char-wrap { position: relative; }
+.char-count {
+  position: absolute;
+  bottom: 8px;
+  right: 10px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  pointer-events: none;
+}
+.char-count.warn { color: var(--accent2); }
+.char-count.over { color: var(--accent4); }
+
+/* ── FLOATING LABEL ── */
+.float-field { position: relative; margin-top: 8px; }
+.float-field input {
+  padding-top: 18px;
+  padding-bottom: 6px;
+}
+.float-field label {
+  position: absolute;
+  left: 12px;
+  top: 12px;
+  font-size: 14px;
+  color: var(--muted);
+  pointer-events: none;
+  transition: all 0.18s ease;
+  background: transparent;
+  padding: 0 2px;
+}
+.float-field input:focus ~ label,
+.float-field input:not(:placeholder-shown) ~ label {
+  top: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* ── SEARCH ── */
+.search-wrap { position: relative; }
+.search-wrap input { padding-left: 40px; padding-right: 36px; border-radius: 100px; }
+.search-icon { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 15px; pointer-events: none; }
+.search-clear { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--muted); cursor: pointer; font-size: 14px; line-height: 1; }
+.search-clear:hover { color: var(--text); }
+
+/* ── TAG INPUT ── */
+.tag-input-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: center;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  cursor: text;
+  min-height: 42px;
+  transition: border-color 0.18s;
+}
+.tag-input-wrap:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,179,237,0.12); }
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(99,179,237,0.12);
+  border: 1px solid rgba(99,179,237,0.25);
+  color: var(--accent);
+  border-radius: 4px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+}
+.tag-x { cursor: pointer; opacity: 0.6; line-height: 1; }
+.tag-x:hover { opacity: 1; }
+.tag-input-wrap input { flex: 1; min-width: 80px; background: none; border: none; outline: none; color: var(--text); font-size: 14px; padding: 2px 4px; }
+.tag-input-wrap input::placeholder { color: var(--muted); }
+
+/* ── MASKED / SPECIAL ── */
+.inp-code {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  letter-spacing: 0.3em;
+  text-align: center;
+  border-radius: var(--radius);
+}
+
+/* ── OTP BOXES ── */
+.otp-wrap { display: flex; gap: 8px; }
+.otp-box {
+  width: 48px;
+  height: 52px;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  border-radius: var(--radius);
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  -webkit-appearance: none;
+  padding: 0;
+}
+.otp-box:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(99,179,237,0.15); }
+
+/* ── RANGE / SLIDER styled as text companion ── */
+.range-text-group { display: flex; gap: 8px; align-items: center; }
+.range-text-group input[type=number] { width: 80px; flex-shrink: 0; text-align: center; }
+
+/* ── INLINE EDIT ── */
+.inline-edit-wrap { display: flex; align-items: center; gap: 8px; }
+.inline-edit-wrap input {
+  background: transparent;
+  border: none;
+  border-bottom: 1.5px dashed var(--border);
+  border-radius: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+  padding: 4px 2px;
+}
+.inline-edit-wrap input:focus { border-bottom-color: var(--accent); box-shadow: none; }
+.edit-icon { color: var(--muted); font-size: 13px; cursor: pointer; }
+.edit-icon:hover { color: var(--accent); }
+
+/* ── CARD WRAPPER ── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+/* ── DIVIDER ── */
+.divider { height: 1px; background: var(--border); margin: 2.5rem 0; }
+
+/* ── FOOTER ── */
+.site-footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--border);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+/* ── COLOR PICKER ── */
+input[type="color"] {
+  padding: 2px 4px;
+  height: 42px;
+  cursor: pointer;
+  border-radius: var(--radius);
+}
+
+/* ── DATE / TIME ── */
+input[type="date"], input[type="time"], input[type="datetime-local"],
+input[type="week"], input[type="month"] {
+  color-scheme: dark;
+}
+
+/* ── RANGE ── */
+input[type="range"] {
+  padding: 0;
+  height: 4px;
+  border-radius: 2px;
+  background: var(--surface2);
+  border: none;
+  cursor: pointer;
+  accent-color: var(--accent);
+}
+input[type="range"]:focus { box-shadow: none; }
+
+/* ── SCROLL BARS ── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+@media (max-width: 768px) {
+  .grid-2, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+  .otp-wrap { justify-content: center; }
+  .container { padding: 1rem; }
+}
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>TextBox <em>Testbed</em></h1>
+  <p>50 distinct input / textbox variants for automation, UI, and accessibility testing.</p>
+  <div class="badge-row">
+    <span class="badge">50 inputs</span>
+    <span class="badge">10 sections</span>
+    <span class="badge">HTML5</span>
+    <span class="badge">No frameworks</span>
+    <span class="badge">Fully interactive</span>
+  </div>
+</header>
+
+<main class="container">
+
+<!-- ════════════════════════════════════════
+     SECTION 1 — BASIC TEXT INPUTS
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 01</span>
+    <h2 class="section-title">Basic Text Inputs</h2>
+  </div>
+  <div class="grid grid-2">
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">01</span> Plain text</label>
+      <input type="text" id="inp01" placeholder="Enter any text..." autocomplete="off">
+      <span class="field-hint">type="text" — default input</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">02</span> Email address</label>
+      <input type="email" id="inp02" placeholder="you@example.com" autocomplete="email">
+      <span class="field-hint">type="email" — validates format on submit</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">03</span> Password</label>
+      <input type="password" id="inp03" placeholder="Min 8 characters">
+      <span class="field-hint">type="password" — chars are masked</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">04</span> Number</label>
+      <input type="number" id="inp04" placeholder="0" min="0" max="9999" step="1">
+      <span class="field-hint">type="number" — spinner arrows, min/max/step</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">05</span> Telephone</label>
+      <input type="tel" id="inp05" placeholder="+91 98765 43210" autocomplete="tel">
+      <span class="field-hint">type="tel" — numeric keyboard on mobile</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">06</span> URL</label>
+      <input type="url" id="inp06" placeholder="https://example.com">
+      <span class="field-hint">type="url" — validates URL format</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">07</span> Search</label>
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input type="search" id="inp07" placeholder="Search anything..." autocomplete="off">
+        <button class="search-clear" onclick="document.getElementById('inp07').value=''">✕</button>
+      </div>
+      <span class="field-hint">type="search" — with clear button</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">08</span> Required field</label>
+      <input type="text" id="inp08" placeholder="Cannot be empty" required>
+      <span class="field-hint">required attribute — browser validates on submit</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 2 — STYLED VARIANTS
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 02</span>
+    <h2 class="section-title">Visual Style Variants</h2>
+  </div>
+  <div class="grid grid-2">
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">09</span> Outlined style</label>
+      <input type="text" class="inp-outlined" placeholder="Outlined border only">
+      <span class="field-hint">Transparent background, visible border</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">10</span> Filled / bottom-line style</label>
+      <input type="text" class="inp-filled" placeholder="Material-style filled">
+      <span class="field-hint">Filled bg, only bottom border animates</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">11</span> Pill / rounded style</label>
+      <input type="text" class="inp-pill" placeholder="Fully rounded pill">
+      <span class="field-hint">border-radius: 100px</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">12</span> Underline only</label>
+      <input type="text" class="inp-underline" placeholder="Underline style">
+      <span class="field-hint">No box — bottom border only</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">13</span> Ghost / dashed</label>
+      <input type="text" class="inp-ghost" placeholder="Ghost input — dashed border">
+      <span class="field-hint">Dashed border, near-transparent bg</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">14</span> Flush / large title</label>
+      <input type="text" class="inp-flush" placeholder="Big title input">
+      <span class="field-hint">Borderless until focused — for hero forms</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 3 — STATES
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 03</span>
+    <h2 class="section-title">Input States</h2>
+  </div>
+  <div class="grid grid-2">
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">15</span> Error state</label>
+      <input type="email" class="inp-error" value="notanemail" id="inp15">
+      <span class="field-error">⚠ Please enter a valid email address</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">16</span> Success state</label>
+      <input type="text" class="inp-success" value="john.doe" id="inp16">
+      <span class="field-hint" style="color:var(--accent3)">✓ Username is available</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">17</span> Warning state</label>
+      <input type="text" class="inp-warning" value="passw0rd" id="inp17">
+      <span class="field-hint" style="color:var(--accent2)">⚡ Weak password — add symbols</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">18</span> Disabled</label>
+      <input type="text" value="Cannot edit this" disabled>
+      <span class="field-hint">disabled attribute — not interactive</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">19</span> Read-only</label>
+      <input type="text" value="Read-only content" readonly id="inp19">
+      <span class="field-hint">readonly — selectable but not editable</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">20</span> Autofilled simulation</label>
+      <input type="text" value="Autofilled value" autocomplete="name" id="inp20" style="background:rgba(99,179,237,0.06); border-color: rgba(99,179,237,0.3);">
+      <span class="field-hint">Visually mimics browser autofill state</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 4 — INPUT GROUPS
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 04</span>
+    <h2 class="section-title">Input Groups &amp; Addons</h2>
+  </div>
+  <div class="grid grid-2">
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">21</span> Prefix — currency</label>
+      <div class="input-group">
+        <span class="ig-prefix">₹</span>
+        <input type="number" placeholder="0.00" min="0" step="0.01">
+      </div>
+      <span class="field-hint">Text prefix addon</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">22</span> Suffix — unit</label>
+      <div class="input-group">
+        <input type="number" placeholder="72" min="0" max="300">
+        <span class="ig-suffix">kg</span>
+      </div>
+      <span class="field-hint">Unit suffix addon</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">23</span> Prefix + Suffix</label>
+      <div class="input-group">
+        <span class="ig-prefix">$</span>
+        <input type="number" placeholder="0.00">
+        <span class="ig-suffix">USD</span>
+      </div>
+      <span class="field-hint">Both prefix and suffix</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">24</span> With action button</label>
+      <div class="input-group">
+        <input type="email" placeholder="Subscribe email">
+        <button class="ig-btn">Subscribe</button>
+      </div>
+      <span class="field-hint">Input + attached button</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">25</span> URL with protocol</label>
+      <div class="input-group">
+        <span class="ig-prefix">https://</span>
+        <input type="text" placeholder="yoursite.com">
+      </div>
+      <span class="field-hint">Protocol prefix</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">26</span> Split first / last name</label>
+      <div class="input-group">
+        <input type="text" placeholder="First" style="border-radius:var(--radius) 0 0 var(--radius)">
+        <input type="text" placeholder="Last" style="border-radius:0 var(--radius) var(--radius) 0; border-left:none">
+      </div>
+      <span class="field-hint">Two inputs joined together</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 5 — ICON INPUTS
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 05</span>
+    <h2 class="section-title">Icon Inputs</h2>
+  </div>
+  <div class="grid grid-2">
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">27</span> Icon left — user</label>
+      <div class="icon-field">
+        <span class="field-icon">👤</span>
+        <input type="text" placeholder="Username">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">28</span> Icon left — lock</label>
+      <div class="icon-field">
+        <span class="field-icon">🔒</span>
+        <input type="password" placeholder="Password">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">29</span> Icon left — location</label>
+      <div class="icon-field">
+        <span class="field-icon">📍</span>
+        <input type="text" placeholder="Enter city or postcode">
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">30</span> Icon right — reveal password</label>
+      <div class="icon-field icon-field-right" style="position:relative">
+        <input type="password" id="inp30" placeholder="Secret password" style="padding-right:38px">
+        <span class="field-icon-r" onclick="
+          var i=document.getElementById('inp30');
+          i.type = i.type==='password' ? 'text' : 'password';
+          this.textContent = i.type==='password' ? '👁️' : '🙈';
+        " style="position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:15px;">👁️</span>
+      </div>
+      <span class="field-hint">Click eye icon to toggle visibility</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 6 — TEXTAREAS
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 06</span>
+    <h2 class="section-title">Textareas &amp; Multiline</h2>
+  </div>
+  <div class="grid grid-2">
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">31</span> Basic textarea</label>
+      <textarea id="inp31" placeholder="Enter a long message here..." rows="4"></textarea>
+      <span class="field-hint">Default — user can resize vertically</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">32</span> Fixed size textarea</label>
+      <textarea class="ta-fixed" placeholder="Fixed size — no resize handle" rows="4"></textarea>
+      <span class="field-hint">resize: none</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">33</span> Textarea with char count</label>
+      <div class="char-wrap">
+        <textarea id="inp33" maxlength="140" placeholder="Tweet-style — 140 char max" rows="3"
+          oninput="
+            var c=this.value.length;
+            var el=document.getElementById('cc33');
+            el.textContent=c+'/140';
+            el.className='char-count'+(c>120?' warn':'')+(c===140?' over':'');
+          "></textarea>
+        <span class="char-count" id="cc33">0/140</span>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">34</span> Monospace / code textarea</label>
+      <textarea class="ta-mono ta-fixed" rows="4" placeholder="// Write code here&#10;function hello() {&#10;  return 'world';&#10;}"></textarea>
+      <span class="field-hint">Monospace font — for code/JSON input</span>
+    </div>
+
+    <div class="field" style="grid-column: span 2 / auto">
+      <label class="field-label"><span class="field-num">35</span> Large body text area</label>
+      <textarea placeholder="Write a detailed description, article body, or long-form content here. This textarea is taller to encourage longer input." rows="6"></textarea>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 7 — DATE, TIME & SPECIAL TYPES
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 07</span>
+    <h2 class="section-title">Date, Time &amp; Special Types</h2>
+  </div>
+  <div class="grid grid-3">
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">36</span> Date picker</label>
+      <input type="date" id="inp36">
+      <span class="field-hint">type="date"</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">37</span> Time picker</label>
+      <input type="time" id="inp37">
+      <span class="field-hint">type="time"</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">38</span> Date + time</label>
+      <input type="datetime-local" id="inp38">
+      <span class="field-hint">type="datetime-local"</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">39</span> Week picker</label>
+      <input type="week" id="inp39">
+      <span class="field-hint">type="week"</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">40</span> Month picker</label>
+      <input type="month" id="inp40">
+      <span class="field-hint">type="month"</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">41</span> Color picker</label>
+      <input type="color" id="inp41" value="#63B3ED" style="width:100%;height:42px;">
+      <span class="field-hint">type="color"</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">42</span> Range / slider</label>
+      <input type="range" id="inp42" min="0" max="100" value="40"
+        oninput="document.getElementById('rv42').textContent=this.value">
+      <span class="field-hint">type="range" — value: <strong id="rv42" style="color:var(--accent)">40</strong></span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">43</span> File upload</label>
+      <input type="file" id="inp43" style="padding:8px;cursor:pointer;">
+      <span class="field-hint">type="file" — native file picker</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">44</span> Hidden field</label>
+      <input type="hidden" id="inp44" value="csrf-token-abc123">
+      <span class="field-hint" style="font-family:var(--font-mono);color:var(--accent)">value="csrf-token-abc123" (not visible)</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 8 — FLOATING LABEL & OTP
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 08</span>
+    <h2 class="section-title">Floating Labels, OTP &amp; Tag Input</h2>
+  </div>
+
+  <div class="grid grid-2" style="margin-bottom:1rem">
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">45</span> Floating label</label>
+      <div class="float-field">
+        <input type="text" id="inp45" placeholder=" ">
+        <label for="inp45">Full name</label>
+      </div>
+      <span class="field-hint">Label floats up on focus / input</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">46</span> Floating label — email</label>
+      <div class="float-field">
+        <input type="email" id="inp46" placeholder=" ">
+        <label for="inp46">Email address</label>
+      </div>
+      <span class="field-hint">Same technique, different type</span>
+    </div>
+
+  </div>
+
+  <div class="field" style="margin-bottom:1rem">
+    <label class="field-label"><span class="field-num">47</span> OTP / PIN input (6 digits)</label>
+    <div class="otp-wrap">
+      <input class="otp-box" type="text" maxlength="1" id="otp1" inputmode="numeric" pattern="[0-9]"
+        oninput="if(this.value)document.getElementById('otp2').focus()">
+      <input class="otp-box" type="text" maxlength="1" id="otp2" inputmode="numeric" pattern="[0-9]"
+        oninput="if(this.value)document.getElementById('otp3').focus()">
+      <input class="otp-box" type="text" maxlength="1" id="otp3" inputmode="numeric" pattern="[0-9]"
+        oninput="if(this.value)document.getElementById('otp4').focus()">
+      <input class="otp-box" type="text" maxlength="1" id="otp4" inputmode="numeric" pattern="[0-9]"
+        oninput="if(this.value)document.getElementById('otp5').focus()">
+      <input class="otp-box" type="text" maxlength="1" id="otp5" inputmode="numeric" pattern="[0-9]"
+        oninput="if(this.value)document.getElementById('otp6').focus()">
+      <input class="otp-box" type="text" maxlength="1" id="otp6" inputmode="numeric" pattern="[0-9]">
+    </div>
+    <span class="field-hint">Auto-advances focus to next box on input</span>
+  </div>
+
+  <div class="field">
+    <label class="field-label"><span class="field-num">48</span> Tag / chip input</label>
+    <div class="tag-input-wrap" id="tagWrap" onclick="document.getElementById('tagInp').focus()">
+      <span class="tag">UI Testing <span class="tag-x" onclick="this.parentNode.remove()">✕</span></span>
+      <span class="tag">Automation <span class="tag-x" onclick="this.parentNode.remove()">✕</span></span>
+      <input type="text" id="tagInp" placeholder="Add tag, press Enter"
+        onkeydown="
+          if(event.key==='Enter'&&this.value.trim()){
+            var t=document.createElement('span');
+            t.className='tag';
+            t.innerHTML=this.value.trim()+' <span class=\\'tag-x\\' onclick=\\'this.parentNode.remove()\\'>✕</span>';
+            document.getElementById('tagWrap').insertBefore(t,this);
+            this.value='';
+            event.preventDefault();
+          }
+        ">
+    </div>
+    <span class="field-hint">Type and press Enter to add tags</span>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 9 — SPECIAL INPUTS
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 09</span>
+    <h2 class="section-title">Special &amp; Formatted Inputs</h2>
+  </div>
+  <div class="grid grid-2">
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">49</span> Credit card number</label>
+      <div class="icon-field">
+        <span class="field-icon">💳</span>
+        <input type="text" class="inp-code" id="inp49" placeholder="0000  0000  0000  0000"
+          maxlength="19" inputmode="numeric"
+          oninput="
+            var v=this.value.replace(/\D/g,'').substring(0,16);
+            this.value=v.match(/.{1,4}/g)?.join('  ')||v;
+          ">
+      </div>
+      <span class="field-hint">Auto-formats into groups of 4</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label"><span class="field-num">50</span> Inline editable field</label>
+      <div class="inline-edit-wrap">
+        <input type="text" id="inp50" value="Project Alpha — Q2 2026" readonly
+          ondblclick="this.removeAttribute('readonly');this.focus();this.style.borderBottomStyle='solid';"
+          onblur="this.setAttribute('readonly','');this.style.borderBottomStyle='dashed';">
+        <span class="edit-icon"
+          onclick="var i=document.getElementById('inp50');i.removeAttribute('readonly');i.focus();">✏️</span>
+      </div>
+      <span class="field-hint">Double-click or click ✏️ to edit inline</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 10 — SELECT VARIANTS
+════════════════════════════════════════ -->
+<section class="section">
+  <div class="section-header">
+    <span class="section-num">§ 10</span>
+    <h2 class="section-title">Select / Dropdown Variants</h2>
+  </div>
+  <div class="grid grid-3">
+
+    <div class="field">
+      <label class="field-label">Single select — country</label>
+      <select>
+        <option value="">Select country…</option>
+        <option>India</option>
+        <option>United States</option>
+        <option>United Kingdom</option>
+        <option>Germany</option>
+        <option>Japan</option>
+        <option>Australia</option>
+      </select>
+      <span class="field-hint">Standard &lt;select&gt;</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Multi-select</label>
+      <select multiple style="height:auto;padding:4px;border-radius:var(--radius);background-image:none;">
+        <option>Android Testing</option>
+        <option>Web Testing</option>
+        <option selected>Automation</option>
+        <option>Performance</option>
+        <option selected>Accessibility</option>
+        <option>Security</option>
+      </select>
+      <span class="field-hint">Ctrl+click to select multiple</span>
+    </div>
+
+    <div class="field">
+      <label class="field-label">Select with optgroup</label>
+      <select>
+        <option value="">Choose framework…</option>
+        <optgroup label="Mobile">
+          <option>Appium</option>
+          <option>Espresso</option>
+          <option>XCUITest</option>
+        </optgroup>
+        <optgroup label="Web">
+          <option>Selenium</option>
+          <option>Playwright</option>
+          <option>Cypress</option>
+        </optgroup>
+      </select>
+      <span class="field-hint">Grouped options with &lt;optgroup&gt;</span>
+    </div>
+
+  </div>
+</section>
+
+</main>
+
+<footer class="site-footer">
+  TextBox Testbed &nbsp;·&nbsp; 50 inputs across 10 sections &nbsp;·&nbsp; Built for UI/automation testing
+</footer>
+
+<script>
+// Set today's date/time defaults for date inputs
+(function() {
+  var now = new Date();
+  var yyyy = now.getFullYear();
+  var mm   = String(now.getMonth()+1).padStart(2,'0');
+  var dd   = String(now.getDate()).padStart(2,'0');
+  var hh   = String(now.getHours()).padStart(2,'0');
+  var min  = String(now.getMinutes()).padStart(2,'0');
+
+  var d = document.getElementById('inp36');
+  if(d) d.value = yyyy+'-'+mm+'-'+dd;
+
+  var t = document.getElementById('inp37');
+  if(t) t.value = hh+':'+min;
+
+  var dt = document.getElementById('inp38');
+  if(dt) dt.value = yyyy+'-'+mm+'-'+dd+'T'+hh+':'+min;
+
+  // Week
+  var wk = document.getElementById('inp39');
+  if(wk) {
+    var jan1 = new Date(yyyy, 0, 1);
+    var wkNum = Math.ceil((((now - jan1) / 86400000) + jan1.getDay() + 1) / 7);
+    wk.value = yyyy+'-W'+String(wkNum).padStart(2,'0');
+  }
+
+  // Month
+  var mo = document.getElementById('inp40');
+  if(mo) mo.value = yyyy+'-'+mm;
+})();
+
+// OTP backspace navigation
+document.querySelectorAll('.otp-box').forEach(function(box, idx, boxes) {
+  box.addEventListener('keydown', function(e) {
+    if(e.key === 'Backspace' && !this.value && idx > 0) {
+      boxes[idx-1].focus();
+    }
+  });
+  box.addEventListener('input', function() {
+    // Allow only digits
+    this.value = this.value.replace(/[^0-9]/g,'');
+  });
+});
+</script>
+
+</body>
+</html>
